@@ -1,4 +1,5 @@
 import {
+  Alert,
   KeyboardAvoidingView,
   Pressable,
   StyleSheet,
@@ -8,13 +9,44 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [image, setImage] = useState("")
+  const [image, setImage] = useState("");
   const navigation = useNavigation();
+
+  const handleRegister = () => {
+    const user = {
+      name: name,
+      email: email,
+      password: password,
+      image: image,
+    };
+    axios.post("http://192.168.132.101:8000/api/user/register", user)
+
+      .then((response) => {
+        console.log(response);
+        Alert.alert(
+          "Registration successfull",
+          "You have been registered successfully"
+        );
+        setName("");
+        setEmail("");
+        setPassword("");
+        setImage("");
+      })
+      .catch((error) => {
+        console.log("Registration error ", error);
+        Alert.alert(
+          "Registration failed",
+          "An error occurred while registering"
+        );
+      });
+  };
+
   return (
     <View style={{ flex: 1, alignItems: "center", padding: 10 }}>
       <KeyboardAvoidingView>
@@ -34,12 +66,11 @@ const RegisterScreen = () => {
         </View>
 
         <View style={{ marginTop: 50 }}>
-
-        <View>
+          <View>
             <Text style={{ fontSize: 18, fontWeight: "600" }}>Name</Text>
             <TextInput
               value={name}
-              onChange={(text) => setName(text)}
+              onChangeText={(text) => setName(text)}
               placeholder="Enter your name"
               style={{
                 borderBottomColor: "gray",
@@ -50,11 +81,11 @@ const RegisterScreen = () => {
             />
           </View>
 
-          <View style={{marginTop:20}}>
+          <View style={{ marginTop: 20 }}>
             <Text style={{ fontSize: 18, fontWeight: "600" }}>Email</Text>
             <TextInput
               value={email}
-              onChange={(text) => setEmail(text)}
+              onChangeText={(text) => setEmail(text)}
               placeholder="Enter your email"
               style={{
                 borderBottomColor: "gray",
@@ -69,7 +100,7 @@ const RegisterScreen = () => {
             <Text style={{ fontSize: 18, fontWeight: "600" }}>Password</Text>
             <TextInput
               value={password}
-              onChange={(text) => setPassword(text)}
+              onChangeText={(text) => setPassword(text)}
               secureTextEntry={true}
               placeholder="Enter your password"
               style={{
@@ -85,7 +116,7 @@ const RegisterScreen = () => {
             <Text style={{ fontSize: 18, fontWeight: "600" }}>Image</Text>
             <TextInput
               value={image}
-              onChange={(text) => setImage(text)}
+              onChangeText={(text) => setImage(text)}
               placeholder="Enter your image"
               style={{
                 borderBottomColor: "gray",
@@ -106,6 +137,7 @@ const RegisterScreen = () => {
               marginRight: "auto",
               borderRadius: 30,
             }}
+            onPress={handleRegister}
           >
             <Text
               style={{ textAlign: "center", fontSize: 16, fontWeight: "bold" }}

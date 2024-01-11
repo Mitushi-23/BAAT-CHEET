@@ -1,4 +1,5 @@
 import {
+  Alert,
   KeyboardAvoidingView,
   Pressable,
   StyleSheet,
@@ -6,13 +7,52 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginSreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  // useEffect(() => {
+  //   const checkToken = () => {
+  //     try {
+  //       const token = AsyncStorage.getItem("authToken");
+  //       if (token) {
+  //         navigation.replace("Home");
+  //       }
+  //     } catch (error) {
+  //       console.log("error", error);
+  //     }
+  //   };
+  //   checkToken();
+  // }, []);
+
+  const handleLogin = () => {
+    const user = {
+      email: email,
+      password: password,
+    };
+
+    axios
+      .post("http://192.168.132.101:8000/api/user/login", user)
+      .then((response) => {
+        console.log(response);
+        const token = response.data.token;
+        AsyncStorage.setItem("authToken", token);
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        console.log("Login failed", error);
+        Alert.alert("Login Failed", "Invalid email or password");
+        setEmail("");
+        setPassword("");
+      });
+  };
+
   return (
     <View style={{ flex: 1, alignItems: "center", padding: 10 }}>
       <KeyboardAvoidingView>
@@ -23,10 +63,10 @@ const LoginSreen = () => {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 24, color: "#83de9d", fontWeight: 700,  }}>
+          <Text style={{ fontSize: 24, color: "#83de9d", fontWeight: 700 }}>
             Sign In
           </Text>
-          <Text style={{ fontSize: 15, marginTop: 10, fontWeight:'600' }}>
+          <Text style={{ fontSize: 15, marginTop: 10, fontWeight: "600" }}>
             Sign in to Your Account
           </Text>
         </View>
@@ -36,7 +76,7 @@ const LoginSreen = () => {
             <Text style={{ fontSize: 18, fontWeight: "600" }}>Email</Text>
             <TextInput
               value={email}
-              onChange={(text) => setEmail(text)}
+              onChangeText={(text) => setEmail(text)}
               placeholder="Enter your email"
               style={{
                 borderBottomColor: "gray",
@@ -51,7 +91,7 @@ const LoginSreen = () => {
             <Text style={{ fontSize: 18, fontWeight: "600" }}>Password</Text>
             <TextInput
               value={password}
-              onChange={(text) => setPassword(text)}
+              onChangeText={(text) => setPassword(text)}
               secureTextEntry={true}
               placeholder="Enter your password"
               style={{
@@ -73,6 +113,7 @@ const LoginSreen = () => {
               marginRight: "auto",
               borderRadius: 30,
             }}
+            onPress={handleLogin}
           >
             <Text
               style={{ textAlign: "center", fontSize: 16, fontWeight: "bold" }}
@@ -80,8 +121,13 @@ const LoginSreen = () => {
               Login
             </Text>
           </Pressable>
-          <Pressable style={{marginTop:15}} onPress={()=> navigation.navigate("Register")}>
-            <Text style={{textAlign:'center', color:'gray'}}>Don't have an account? SignUp</Text>
+          <Pressable
+            style={{ marginTop: 15 }}
+            onPress={() => navigation.navigate("Register")}
+          >
+            <Text style={{ textAlign: "center", color: "gray" }}>
+              Don't have an account? SignUp
+            </Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
