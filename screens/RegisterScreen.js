@@ -20,7 +20,7 @@ const RegisterScreen = () => {
       <KeyboardAvoidingView>
         <View
           style={{
-            marginTop: 100,
+            marginTop: 80,
             justifyContent: "center",
             alignItems: "center",
           }}

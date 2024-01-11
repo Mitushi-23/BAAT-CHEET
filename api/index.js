@@ -15,7 +15,7 @@ app.use(passport.initialize());
 const jwt = require("jsonwebtoken");
 
 mongoose
-  .connect("mongodb+srv://Mitushi-23:mongo22@cluster0.ktbze.mongodb.net/", {
+  .connect("mongodb+srv://Mitushi-23:mongo22@cluster0.ktbze.mongodb.net/BAATचीत", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -29,3 +29,7 @@ mongoose
 app.listen(port,()=>{
     console.log("Server running on port 8000");
 })
+
+const userRoutes = require("./routes/userRoutes")
+
+app.use("/api/user",userRoutes)
