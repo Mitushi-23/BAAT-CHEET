@@ -17,19 +17,21 @@ const LoginSreen = () => {
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   const checkToken = () => {
-  //     try {
-  //       const token = AsyncStorage.getItem("authToken");
-  //       if (token) {
-  //         navigation.replace("Home");
-  //       }
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   };
-  //   checkToken();
-  // }, []);
+  useEffect(() => {
+    const checkToken = async() => {
+      // AsyncStorage.removeItem("authToken");
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        if (token) {
+          navigation.replace("Home");
+          console.log(token)
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    checkToken();
+  }, []);
 
   const handleLogin = () => {
     const user = {
@@ -48,8 +50,6 @@ const LoginSreen = () => {
       .catch((error) => {
         console.log("Login failed", error);
         Alert.alert("Login Failed", "Invalid email or password");
-        setEmail("");
-        setPassword("");
       });
   };
 
