@@ -29,15 +29,31 @@ const login = asyncHandler(async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (!await user.matchPassword(password)) {
+    if (!(await user.matchPassword(password))) {
       return res.status(404).json({ message: "Invalid Password" });
     }
     const token = generateToken(user._id);
-    res.status(200).json({ token });
+    res.status(200).json({ 
+      token:token,
+      userId: user._id
+     });
   } catch (error) {
     console.log("Error in finding the user", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-module.exports = { login, register };
+//Fetch all users except loggen in user
+
+const fetchUser = asyncHandler(async (req, res) => {
+  try {
+    const loogedInUserId = req.params.userId;
+    const users = await User.find({ _id: { $ne: loogedInUserId } });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log("error in retrieving users");
+    return res.status(500).json({ message: "Error in retreiving users" });
+  }
+});
+
+module.exports = { login, register, fetchUser };

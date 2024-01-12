@@ -1,5 +1,6 @@
 import {
   Alert,
+  Image,
   KeyboardAvoidingView,
   Pressable,
   StyleSheet,
@@ -7,15 +8,47 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import * as ImagePicker from "expo-image-picker"; 
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
+
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission denied", "Sorry, we need camera roll permissions to make this work!");
+      }
+    })();
+  }, []);
+
+  const handleChooseImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+      if (!result.cancelled) {
+      console.log(result.assets[0].uri)
+      setImage(result.assets[0].uri)
+      } else {
+        console.log("Image picker cancelled");
+      }
+    } catch (error) {
+      console.error("Image picker error:", error);
+    }
+  };
+
   const navigation = useNavigation();
 
   const handleRegister = () => {
@@ -25,7 +58,8 @@ const RegisterScreen = () => {
       password: password,
       image: image,
     };
-    axios.post("http://192.168.132.101:8000/api/user/register", user)
+    axios
+      .post("http://192.168.132.101:8000/api/user/register", user)
 
       .then((response) => {
         console.log(response);
@@ -114,17 +148,18 @@ const RegisterScreen = () => {
 
           <View style={{ marginTop: 20 }}>
             <Text style={{ fontSize: 18, fontWeight: "600" }}>Image</Text>
-            <TextInput
-              value={image}
-              onChangeText={(text) => setImage(text)}
-              placeholder="Enter your image"
-              style={{
-                borderBottomColor: "gray",
-                borderBottomWidth: 1,
-                width: 300,
-                marginVertical: 5,
-              }}
-            />
+            <Pressable onPress={handleChooseImage}>
+              <Text style={{ color: "blue", marginTop: 5 }}>
+                Choose an image from gallery
+              </Text>
+            </Pressable>
+            {image ? (
+              <Image
+              key={image}
+                source={{ uri: image }}
+                style={{ width: 100, height: 100, marginTop: 10 }}
+              />
+            ) : <Text>No image</Text>}
           </View>
 
           <Pressable

@@ -18,13 +18,14 @@ const LoginSreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const checkToken = async() => {
-      // AsyncStorage.removeItem("authToken");
+    const checkToken = async () => {
+      // AsyncStorage.removeItem("userData");
       try {
-        const token = await AsyncStorage.getItem("authToken");
+        const userData = await AsyncStorage.getItem("userData");
+        const storedData = JSON.parse(userData);
+        const token = storedData.authToken;
         if (token) {
           navigation.replace("Home");
-          console.log(token)
         }
       } catch (error) {
         console.log("error", error);
@@ -44,7 +45,12 @@ const LoginSreen = () => {
       .then((response) => {
         console.log(response);
         const token = response.data.token;
-        AsyncStorage.setItem("authToken", token);
+        const id = response.data.userId;
+        const userData = {
+          authToken: token,
+          userId: id,
+        };
+        AsyncStorage.setItem("userData", JSON.stringify(userData));
         navigation.navigate("Home");
       })
       .catch((error) => {
