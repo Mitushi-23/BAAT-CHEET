@@ -10,6 +10,7 @@ const {
   fetchFriendRequests,
   acceptRequest,
   fetchFriends,
+  fetchUserDetails
 } = require("../controllers/userController");
 const { protect } = require("../middlewares/authModdleware");
 
@@ -20,6 +21,7 @@ router.post("/friend-request", friendRequest);
 router.get("/friend-request/sent/:userId", fetchSentFriendRequests);
 router.get("/friend-request/:userId", fetchFriendRequests);
 router.post("/friend-request/accept", acceptRequest);
-router.get("/friend-request/friends/:userId", fetchFriends);
+router.get("/friends/:userId", fetchFriends);
+router.get("/:userId", fetchUserDetails);
 
 module.exports = router;

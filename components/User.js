@@ -11,9 +11,11 @@ const User = ({ item }) => {
 
   useEffect(() => {
     fetchSentFriendRequests();
-    fetchFriends();
   }, []);
 
+  useEffect(() => {
+    fetchFriends();
+  }, []);
 
   const fetchSentFriendRequests = async () => {
     try {
@@ -32,7 +34,7 @@ const User = ({ item }) => {
   const fetchFriends = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.132.101:8000/api/user/friend-request/friends/${userId}`
+        `http://192.168.132.101:8000/api/user/friends/${userId}`
       );
 
       const data = response.data;
@@ -82,18 +84,18 @@ const User = ({ item }) => {
         <Text>{item?.name}</Text>
         <Text style={{ color: "gray" }}>{item?.email}</Text>
       </View>
-      {friends.some((friend)=> friend._id===item._id) ? (
+      {friends.some((friend) => friend._id === item._id) ? (
         <Pressable
           style={{
             borderWidth: 2,
             borderColor: "#83de9d",
-            backgroundColor:'#000000',
+            backgroundColor: "#000000",
             padding: 7,
             borderRadius: 6,
             width: 85,
           }}
         >
-          <Text style={{ color:'#83de9d',textAlign: "center" }}>Added</Text>
+          <Text style={{ color: "#83de9d", textAlign: "center" }}>Added</Text>
         </Pressable>
       ) : requestSent ||
         sentFriendRequests.some((friend) => friend === item._id) ? (

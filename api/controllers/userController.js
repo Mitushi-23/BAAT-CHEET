@@ -36,6 +36,9 @@ const login = asyncHandler(async (req, res) => {
     res.status(200).json({
       token: token,
       userId: user._id,
+      name: user.name,
+      email: user.email,
+      image: user.image,
     });
   } catch (error) {
     console.log("Error in finding the user", error);
@@ -134,7 +137,6 @@ const acceptRequest = asyncHandler(async (req, res) => {
       recepient.friends.push(senderId);
     }
 
-
     sender.sentFriendRequests = sender.sentFriendRequests.filter(
       (request) => request.toString() !== recepientId.toString()
     );
@@ -154,7 +156,7 @@ const acceptRequest = asyncHandler(async (req, res) => {
 
 //endpoint to fect all friends
 
-const fetchFriends = asyncHandler(async(req,res)=>{
+const fetchFriends = asyncHandler(async (req, res) => {
   try {
     const loggedInUserId = req.params.userId;
     const user = await User.findById(loggedInUserId).populate(
@@ -166,7 +168,19 @@ const fetchFriends = asyncHandler(async(req,res)=>{
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
-})
+});
+
+// endpoint to fetch details of particular user
+
+const fetchUserDetails = asyncHandler(async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userDetails = await User.findById(userId);
+    res.status(200).json(userDetails);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 module.exports = {
   login,
@@ -176,5 +190,6 @@ module.exports = {
   fetchSentFriendRequests,
   fetchFriendRequests,
   acceptRequest,
-  fetchFriends
+  fetchFriends,
+  fetchUserDetails
 };

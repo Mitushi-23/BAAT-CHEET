@@ -14,7 +14,7 @@ const ChatScreen = () => {
   const fetchFriends = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.132.101:8000/api/user/friend-request/friends/${userId}`
+        `http://192.168.132.101:8000/api/user/friends/${userId}`
       );
 
       const data = response.data;

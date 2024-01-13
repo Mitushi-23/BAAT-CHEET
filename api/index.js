@@ -33,5 +33,7 @@ app.listen(port,()=>{
 })
 
 const userRoutes = require("./routes/userRoutes")
+const messageRoutes = require("./routes/messageRoutes")
 
 app.use("/api/user",userRoutes)
+app.use("/api/message",messageRoutes)

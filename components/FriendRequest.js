@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { UserType } from "../userContext";
 import { useNavigation } from "@react-navigation/native";
 
-const FriendRequest = ({ item, friendRequest, sentFriendRequest }) => {
+const FriendRequest = ({ item, friendRequest, setFriendRequest }) => {
   const { userId, setUserId } = useContext(UserType);
   const navigation = useNavigation();
   const handleAccept = async (friendRequestId) => {
@@ -23,7 +23,7 @@ const FriendRequest = ({ item, friendRequest, sentFriendRequest }) => {
       );
 
       if (response.ok) {
-        sentFriendRequest(
+        setFriendRequest(
           friendRequest.filter((requests) => requests._id !== friendRequestId)
         );
       }
