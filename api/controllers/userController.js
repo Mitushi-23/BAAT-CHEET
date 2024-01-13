@@ -33,10 +33,10 @@ const login = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Invalid Password" });
     }
     const token = generateToken(user._id);
-    res.status(200).json({ 
-      token:token,
-      userId: user._id
-     });
+    res.status(200).json({
+      token: token,
+      userId: user._id,
+    });
   } catch (error) {
     console.log("Error in finding the user", error);
     res.status(500).json({ message: "Internal server error" });
@@ -56,4 +56,57 @@ const fetchUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { login, register, fetchUser };
+// endpoint to send a request to a user
+
+const friendRequest = asyncHandler(async (req, res) => {
+  const { currentUserId, selectedUserId } = req.body;
+  try {
+    // Update recipient's friend request array
+    const recipientUser = await User.findByIdAndUpdate(selectedUserId, {
+      $addToSet: { friendRequests: currentUserId },
+    });
+
+    if (!recipientUser) {
+      return res.status(404).json({ message: "Recipient user not found" });
+    }
+
+    // Update sender's sent friend request array
+    const senderUser = await User.findByIdAndUpdate(currentUserId, {
+      $addToSet: { sentFriendRequests: selectedUserId },
+    });
+
+    if (!senderUser) {
+      return res.status(404).json({ message: "Sender user not found" });
+    }
+
+    res.sendStatus(200);
+  } catch (error) {
+    return res.status(500).json({ message: "Error in sending request" });
+  }
+});
+
+// fetch all friends
+
+const fetchFriendRequests = asyncHandler(async (req, res) => {
+  try {
+    const loggedInUserId = req.params.userId;
+    const users = await User.findById(loggedInUserId);
+    const friendRequestsSent = users.sentFriendRequests;
+    if (!friendRequestsSent) {
+      return res.status(404).json({ message: "No request sent" });
+    }
+    res.status(200).json(friendRequestsSent);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "error in fetching friend requests" });
+  }
+});
+
+module.exports = {
+  login,
+  register,
+  fetchUser,
+  friendRequest,
+  fetchFriendRequests,
+};
