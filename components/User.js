@@ -6,25 +6,42 @@ import axios from "axios";
 const User = ({ item }) => {
   const { userId, setUserId } = useContext(UserType);
   const [requestSent, setRequestSent] = useState(false);
-  const [friendRequests, setFriendRequests] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [sentFriendRequests, setSentFriendRequests] = useState([]);
 
   useEffect(() => {
-    fetchFriendRequests();
+    fetchSentFriendRequests();
+    fetchFriends();
   }, []);
 
-  const fetchFriendRequests = async () => {
+
+  const fetchSentFriendRequests = async () => {
     try {
       const response = await axios.get(
         `http://192.168.132.101:8000/api/user/friend-request/sent/${userId}`
       );
       const data = response.data;
       if (data) {
-        setFriendRequests(data);
+        setSentFriendRequests(data);
       }
     } catch (error) {
       console.log("error message", error);
     }
   };
+
+  const fetchFriends = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.132.101:8000/api/user/friend-request/friends/${userId}`
+      );
+
+      const data = response.data;
+      setFriends(data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const handleFriendRequest = async (currentUserId, selectedUserId) => {
     try {
       const response = await fetch(
@@ -65,7 +82,21 @@ const User = ({ item }) => {
         <Text>{item?.name}</Text>
         <Text style={{ color: "gray" }}>{item?.email}</Text>
       </View>
-      {requestSent || friendRequests.some((friend) => friend === item._id) ? (
+      {friends.some((friend)=> friend._id===item._id) ? (
+        <Pressable
+          style={{
+            borderWidth: 2,
+            borderColor: "#83de9d",
+            backgroundColor:'#000000',
+            padding: 7,
+            borderRadius: 6,
+            width: 85,
+          }}
+        >
+          <Text style={{ color:'#83de9d',textAlign: "center" }}>Added</Text>
+        </Pressable>
+      ) : requestSent ||
+        sentFriendRequests.some((friend) => friend === item._id) ? (
         <Pressable
           style={{
             borderWidth: 2,

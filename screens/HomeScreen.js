@@ -45,16 +45,26 @@ const HomeScreen = () => {
       ),
       headerRight: () => (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Ionicons name="chatbox-ellipses-outline" size={24} color="black" />
-          <Ionicons name="people-outline" size={24} color="black" />
+          <Ionicons
+            name="chatbox-ellipses-outline"
+            size={24}
+            color="black"
+            onPress={() => navigation.navigate("Chats")}
+          />
+          <Ionicons
+            name="people-outline"
+            size={24}
+            color="black"
+            onPress={() => navigation.navigate("Friends")}
+          />
         </View>
       ),
     });
   }, []);
   return (
     <View>
-      <View style={{margin:10}}>
-        {users.map((item,index)=>(
+      <View style={{ margin: 10 }}>
+        {users.map((item, index) => (
           <User key={index} item={item} />
         ))}
       </View>

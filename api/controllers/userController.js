@@ -85,9 +85,9 @@ const friendRequest = asyncHandler(async (req, res) => {
   }
 });
 
-// fetch all friends
+// fetch all sent friendrequest
 
-const fetchFriendRequests = asyncHandler(async (req, res) => {
+const fetchSentFriendRequests = asyncHandler(async (req, res) => {
   try {
     const loggedInUserId = req.params.userId;
     const users = await User.findById(loggedInUserId);
@@ -103,10 +103,78 @@ const fetchFriendRequests = asyncHandler(async (req, res) => {
   }
 });
 
+// Fetch all friend requests received
+const fetchFriendRequests = asyncHandler(async (req, res) => {
+  try {
+    const loggedInUserId = req.params.userId;
+    const user = await User.findById(loggedInUserId).populate(
+      "friendRequests",
+      "name email image"
+    );
+    const friendRequest = user.friendRequests;
+    res.status(200).json(friendRequest);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// endpoint to accept friend request
+
+const acceptRequest = asyncHandler(async (req, res) => {
+  try {
+    const { senderId, recepientId } = req.body;
+
+    const sender = await User.findById(senderId);
+    const recepient = await User.findById(recepientId);
+    if (!sender.friends.includes(recepientId)) {
+      sender.friends.push(recepientId);
+    }
+
+    if (!recepient.friends.includes(senderId)) {
+      recepient.friends.push(senderId);
+    }
+
+
+    sender.sentFriendRequests = sender.sentFriendRequests.filter(
+      (request) => request.toString() !== recepientId.toString()
+    );
+
+    recepient.friendRequests = recepient.friendRequests.filter(
+      (request) => request.toString() !== senderId.toString()
+    );
+
+    await sender.save();
+    await recepient.save();
+
+    res.status(200).json({ message: "Friend Request accepted" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//endpoint to fect all friends
+
+const fetchFriends = asyncHandler(async(req,res)=>{
+  try {
+    const loggedInUserId = req.params.userId;
+    const user = await User.findById(loggedInUserId).populate(
+      "friends",
+      "name email image"
+    );
+    const friends = user.friends;
+    res.status(200).json(friends);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+})
+
 module.exports = {
   login,
   register,
   fetchUser,
   friendRequest,
+  fetchSentFriendRequests,
   fetchFriendRequests,
+  acceptRequest,
+  fetchFriends
 };
