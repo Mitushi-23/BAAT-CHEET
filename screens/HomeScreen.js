@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,35 +9,49 @@ import User from "../components/User";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const { userId, setUserId } = useContext(UserType);
+  const {userDetail, setUserDetail, userId, setUserId } = useContext(UserType);
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const userData = await AsyncStorage.getItem("userData");
-      const storedData = JSON.parse(userData);
-      const token = storedData.authToken;
-      const userId = storedData.userId;
-      const config = {
-        headers: {
-          Authorization: `${token}`,
-        },
-      };
-      setUserId(userId);
-
-      axios
-        .get(`http://192.168.132.101:8000/api/user/users/${userId}`, config)
-        .then((response) => {
-          setUsers(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  const fetchUserDetail = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.132.101:8000/api/user/${userId}`
+      );
+      setHeaderOptions(response.data.image);
+      setUserDetail(response.data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const fetchUser = async () => {
+    const userData = await AsyncStorage.getItem("userData");
+    const storedData = JSON.parse(userData);
+    const token = storedData.authToken;
+    const config = {
+      headers: {
+        Authorization: `${token}`,
+      },
     };
 
+    axios
+      .get(`http://192.168.132.101:8000/api/user/users/${userId}`, config)
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
     fetchUser();
+    fetchUserDetail();
   }, []);
-  useLayoutEffect(() => {
+
+  const handleProfile = () => {
+    navigation.navigate("Profile");
+  };
+
+  const setHeaderOptions = async (image) => {
     navigation.setOptions({
       headerTitle: "",
       headerLeft: () => (
@@ -57,10 +71,25 @@ const HomeScreen = () => {
             color="black"
             onPress={() => navigation.navigate("Friends")}
           />
+        <Pressable
+          onPress={handleProfile}
+        >
+
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: 25,
+              height: 25,
+              borderRadius: 25,
+              resizeMode: "cover",
+            }}
+            />
+            </Pressable>
         </View>
       ),
     });
-  }, []);
+  };
+
   return (
     <View>
       <View style={{ margin: 10 }}>

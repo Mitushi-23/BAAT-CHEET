@@ -7,14 +7,18 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserType } from "../userContext";
 
 const LoginSreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {userDetail, setUserDetail, userId, setUserId } = useContext(UserType);
+
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -24,7 +28,9 @@ const LoginSreen = () => {
         const userData = await AsyncStorage.getItem("userData");
         const storedData = JSON.parse(userData);
         const token = storedData.authToken;
+        const userId = storedData.userId
         if (token) {
+          setUserId(userId);
           navigation.replace("Home");
         }
       } catch (error) {
@@ -43,14 +49,17 @@ const LoginSreen = () => {
     axios
       .post("http://192.168.132.101:8000/api/user/login", user)
       .then((response) => {
-        console.log(response);
         const token = response.data.token;
         const id = response.data.userId;
         const userData = {
           authToken: token,
           userId: id,
         };
+        setUserId(id);
+        setUserDetail(response.data)
         AsyncStorage.setItem("userData", JSON.stringify(userData));
+        setPassword("");
+        setEmail("");
         navigation.navigate("Home");
       })
       .catch((error) => {
