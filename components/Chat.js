@@ -1,9 +1,47 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { UserType } from "../userContext";
+import axios from "axios";
+import { Entypo } from "@expo/vector-icons";
 
 const Chat = ({ item }) => {
   const navigation = useNavigation();
+  const [messages, setMessages] = useState([]);
+  const { userId } = useContext(UserType);
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.132.101:8000/api/message/messages/${userId}/${item._id}`
+      );
+      const data = await response.data;
+      setMessages(data);
+    } catch (error) {
+      console.log("error in showing message", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  const lastMessage = () => {
+    const nonEmptyMessages = messages.filter((message) => message.messageType);
+
+    // Get the last message
+    const lastMessage =
+      nonEmptyMessages.length > 0
+        ? nonEmptyMessages[nonEmptyMessages.length - 1]
+        : null;
+    return lastMessage;
+  };
+  const lastMsg = lastMessage();
+
+  const formatTime = (time) => {
+    const options = { hour: "numeric", minute: "numeric" };
+    return new Date(time).toLocaleString("en-US", options);
+  };
+
   return (
     <Pressable
       onPress={() =>
@@ -29,11 +67,29 @@ const Chat = ({ item }) => {
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>{item.name}</Text>
 
         <Text style={{ fontSize: 15, color: "gray", fontWeight: 500 }}>
-          Hi how are you
+          {lastMsg ? (
+            lastMsg.messageType === "text" ? (
+              lastMsg.message
+            ) : (
+              <>
+                <Entypo
+                  name="image"
+                  size={15}
+                  color="gray"
+                  style={{ marginRight: 10 }}
+                />
+                Photo
+              </>
+            )
+          ) : (
+            ""
+          )}
         </Text>
       </View>
       <View>
-        <Text style={{ color: "#585858", fontWeight: 400 }}>3:00pm</Text>
+        <Text style={{ color: "#585858", fontWeight: 400 }}>
+          {lastMsg ? formatTime(lastMsg.timeStamp) : ""}
+        </Text>
       </View>
     </Pressable>
   );

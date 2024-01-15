@@ -1,11 +1,7 @@
 import {
   KeyboardAvoidingView,
-  Pressable,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
-  View,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import InputBox from "../components/InputBox";

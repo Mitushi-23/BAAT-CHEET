@@ -2,12 +2,9 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { UserType } from "../userContext";
 import { useRoute } from "@react-navigation/native";
-import axios from "axios";
 
 const MessageBody = ({ messages }) => {
   const { userId } = useContext(UserType);
-  const route = useRoute();
-  const { recepientId } = route.params;
 
   const formTime = (time) => {
     const options = { hour: "numeric", minute: "numeric" };
