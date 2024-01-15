@@ -1,22 +1,39 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native';
-import LoginSreen from './screens/LoginSreen';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RegisterScreen from './screens/RegisterScreen';
-import HomeScreen from './screens/HomeScreen';
-import FriendsScreen from './screens/FriendsScreen';
-import ChatScreen from './screens/ChatScreen';
-import ChatMessageScreen from './screens/ChatMessageScreen';
-import ProfileScreen from './screens/ProfileScreen';
+import { Image, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import LoginSreen from "./screens/LoginSreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import RegisterScreen from "./screens/RegisterScreen";
+import HomeScreen from "./screens/HomeScreen";
+import FriendsScreen from "./screens/FriendsScreen";
+import ChatScreen from "./screens/ChatScreen";
+import ChatMessageScreen from "./screens/ChatMessageScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import { RecepientProfile } from "./components/MessageHeader";
 
 const StackNavigator = () => {
-    const Stack = createNativeStackNavigator();
+  const Stack = createNativeStackNavigator();
+  const setLogo = () => ({
+    headerRight: () => (
+      <Image
+        source={require("./assets/logo/BAATचीत.png")}
+        style={{ width: 70, height: 25, resizeMode: "cover", marginRight: 10 }}
+      />
+    ),
+  });
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginSreen} options={{headerShown:false}}/>
-        <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown:false}}/>
+        <Stack.Screen
+          name="Login"
+          component={LoginSreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Friends" component={FriendsScreen} />
@@ -24,9 +41,9 @@ const StackNavigator = () => {
         <Stack.Screen name="Messages" component={ChatMessageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-  )
-}
+  );
+};
 
-export default StackNavigator
+export default StackNavigator;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

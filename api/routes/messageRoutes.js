@@ -1,5 +1,5 @@
 const express = require("express");
-const { messages } = require("../controllers/messageController");
+const { messages,fetchMessage } = require("../controllers/messageController");
 const multer = require("multer");
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     },
   });
 const upload = multer({ storage: storage });
-
-router.post("/messages",upload.single("imageFile"),messages)
+router.post("/messages",messages)
+router.get("/messages/:senderId/:receiverId",fetchMessage)
 
 module.exports = router
