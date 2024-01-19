@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import * as ImagePicker from "expo-image-picker"; 
+import axiosUrl from "../config";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -58,8 +59,8 @@ const RegisterScreen = () => {
       password: password,
       image: image,
     };
-    axios
-      .post("http://192.168.132.101:8000/api/user/register", user)
+    axiosUrl
+      .post("user/register", user)
 
       .then((response) => {
         console.log(response);

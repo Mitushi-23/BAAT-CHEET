@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { UserType } from "../userContext";
 import axios from "axios";
 import { Entypo } from "@expo/vector-icons";
+import axiosUrl from "../config";
 
 const Chat = ({ item }) => {
   const navigation = useNavigation();
@@ -11,8 +12,8 @@ const Chat = ({ item }) => {
   const { userId } = useContext(UserType);
   const fetchMessages = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.132.101:8000/api/message/messages/${userId}/${item._id}`
+      const response = await axiosUrl.get(
+        `message/messages/${userId}/${item._id}`
       );
       const data = await response.data;
       setMessages(data);

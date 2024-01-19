@@ -2,36 +2,38 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
 import { UserType } from "../userContext";
 import { useNavigation } from "@react-navigation/native";
+import axiosUrl from "../config";
 
 const FriendRequest = ({ item, friendRequest, setFriendRequest }) => {
   const { userId, setUserId } = useContext(UserType);
   const navigation = useNavigation();
+
   const handleAccept = async (friendRequestId) => {
     try {
-      const response = await fetch(
-        "http://192.168.132.101:8000/api/user/friend-request/accept",
+      const response = await axiosUrl.post(
+        "user/friend-request/accept",
         {
-          method: "POST",
+          senderId: friendRequestId,
+          recepientId: userId,
+        },
+        {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            senderId: friendRequestId,
-            recepientId: userId,
-          }),
         }
       );
-
-      if (response.ok) {
+  
+      if (response.status === 200) {
         setFriendRequest(
           friendRequest.filter((requests) => requests._id !== friendRequestId)
         );
       }
       navigation.navigate("Chats");
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
+  
 
   return (
     <Pressable

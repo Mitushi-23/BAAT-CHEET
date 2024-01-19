@@ -6,6 +6,7 @@ import { useRoute } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import axiosUrl from "../config";
 
 const InputBox = ({ fetchMessages }) => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
@@ -34,8 +35,8 @@ const InputBox = ({ fetchMessages }) => {
         data.messageType = "text";
         data.messageText = messageText;
       }
-      const response = await axios.post(
-        "http://192.168.132.101:8000/api/message/messages",
+      const response = await axiosUrl.post(
+        "message/messages",
         data
       );
       if (response.status === 200) {

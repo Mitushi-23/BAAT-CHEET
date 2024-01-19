@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserType } from "../userContext";
+import axiosUrl from "../config";
 
 const LoginSreen = () => {
   const [email, setEmail] = useState("");
@@ -46,8 +47,8 @@ const LoginSreen = () => {
       password: password,
     };
 
-    axios
-      .post("http://192.168.132.101:8000/api/user/login", user)
+    axiosUrl
+      .post("user/login", user)
       .then((response) => {
         const token = response.data.token;
         const id = response.data.userId;

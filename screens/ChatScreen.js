@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserType } from "../userContext";
 import axios from "axios";
 import Chat from "../components/Chat";
+import axiosUrl from "../config";
 
 const ChatScreen = () => {
   const { userId, setUserId } = useContext(UserType);
@@ -13,8 +14,8 @@ const ChatScreen = () => {
 
   const fetchFriends = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.132.101:8000/api/user/friends/${userId}`
+      const response = await axiosUrl.get(
+        `user/friends/${userId}`
       );
 
       const data = response.data;

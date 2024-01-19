@@ -10,6 +10,7 @@ import { RecepientProfile } from "../components/MessageHeader";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import MessageBody from "../components/MessageBody";
+import axiosUrl from "../config";
 
 const ChatMessageScreen = () => {
   const { userId } = useContext(UserType);
@@ -21,8 +22,8 @@ const ChatMessageScreen = () => {
 
   const recepientDetail = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.132.101:8000/api/user/${recepientId}`
+      const response = await axiosUrl.get(
+        `user/${recepientId}`
       );
       setRecepientData(response.data);
     } catch (error) {
@@ -31,8 +32,8 @@ const ChatMessageScreen = () => {
   };
   const fetchMessages = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.132.101:8000/api/message/messages/${userId}/${recepientId}`
+      const response = await axiosUrl.get(
+        `message/messages/${userId}/${recepientId}`
       );
       const data = await response.data;
       setMessages(data);

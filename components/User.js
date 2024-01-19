@@ -2,6 +2,7 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { UserType } from "../userContext";
 import axios from "axios";
+import axiosUrl from "../config";
 
 const User = ({ item }) => {
   const { userId, setUserId } = useContext(UserType);
@@ -19,8 +20,8 @@ const User = ({ item }) => {
 
   const fetchSentFriendRequests = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.132.101:8000/api/user/friend-request/sent/${userId}`
+      const response = await axiosUrl.get(
+        `user/friend-request/sent/${userId}`
       );
       const data = response.data;
       if (data) {
@@ -33,8 +34,8 @@ const User = ({ item }) => {
 
   const fetchFriends = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.132.101:8000/api/user/friends/${userId}`
+      const response = await axiosUrl.get(
+        `user/friends/${userId}`
       );
 
       const data = response.data;
@@ -44,26 +45,27 @@ const User = ({ item }) => {
     }
   };
 
-  const handleFriendRequest = async (currentUserId, selectedUserId) => {
-    try {
-      const response = await fetch(
-        "http://192.168.132.101:8000/api/user/friend-request",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ currentUserId, selectedUserId }),
-        }
-      );
 
-      if (response.ok) {
-        setRequestSent(true);
+
+const handleFriendRequest = async (currentUserId, selectedUserId) => {
+  try {
+    const response = await axiosUrl.post(
+      "user/friend-request",
+      { currentUserId, selectedUserId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    } catch (error) {
-      console.log("Error in sending request", error);
+    );
+
+    if (response.status === 200) {
+      setRequestSent(true);
     }
-  };
+  } catch (error) {
+    console.error("Error in sending request", error);
+  }
+};
 
   return (
     <Pressable

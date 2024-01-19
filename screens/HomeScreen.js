@@ -6,6 +6,7 @@ import { UserType } from "../userContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import User from "../components/User";
+import axiosUrl from "../config";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -14,8 +15,8 @@ const HomeScreen = () => {
 
   const fetchUserDetail = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.132.101:8000/api/user/${userId}`
+      const response = await axiosUrl.get(
+        `user/${userId}`
       );
       setHeaderOptions(response.data.image);
       setUserDetail(response.data);
@@ -33,8 +34,8 @@ const HomeScreen = () => {
       },
     };
 
-    axios
-      .get(`http://192.168.132.101:8000/api/user/users/${userId}`, config)
+    axiosUrl
+      .get(`user/users/${userId}`, config)
       .then((response) => {
         setUsers(response.data);
       })
