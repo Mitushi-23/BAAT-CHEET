@@ -1,15 +1,14 @@
 {
   "expo": {
-    "name": "chatApp",
-    "slug": "chatApp",
+    "name": "BAATचीत",
+    "slug": "BAAT-CHEET",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/logo/icon.png",
+      "resizeMode": "contain"
     },
     "plugins": [
       [
@@ -27,12 +26,21 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.mitushi_23.BAATCHEET"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b74eeb44-7ddc-4e1f-b22b-fe5d6d01f482"
+      }
     }
   }
 }

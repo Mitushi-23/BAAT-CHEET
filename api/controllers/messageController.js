@@ -12,7 +12,7 @@ const messages = asyncHandler(async (req, res) => {
       messageType,
       message:messageText,
       timeStamp: new Date(),
-      imageUrl: messageType === "image" ? imageUrl : null,
+      imageUrl: messageType === "image" ? req.file.path : null,
     });
     await newMessage.save();
     res.status(200).json({ message: "Message sent successfully" });

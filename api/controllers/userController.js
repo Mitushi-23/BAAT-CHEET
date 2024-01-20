@@ -4,7 +4,7 @@ const asyncHandler = require("express-async-handler");
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, password, image } = req.body;
-  const newUser = new User({ name, email, password, image });
+  const newUser = new User({ name, email, password, image: req.file.path });
   newUser
     .save()
     .then(() => {
@@ -191,5 +191,5 @@ module.exports = {
   fetchFriendRequests,
   acceptRequest,
   fetchFriends,
-  fetchUserDetails
+  fetchUserDetails,
 };

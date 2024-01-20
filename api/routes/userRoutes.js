@@ -13,8 +13,20 @@ const {
   fetchUserDetails
 } = require("../controllers/userController");
 const { protect } = require("../middlewares/authModdleware");
+const multer = require("multer");
 
-router.post("/register", register);
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'files/profile'); // specify the folder where you want to save uploaded images
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname); // create unique filenames
+  },
+});
+
+const upload = multer({ storage: storage });
+
+router.post("/register", upload.single('image'),register);
 router.post("/login", login);
 router.route("/users/:userId").get(protect, fetchUser);
 router.post("/friend-request", friendRequest);
