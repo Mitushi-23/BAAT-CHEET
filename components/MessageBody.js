@@ -67,7 +67,7 @@ const MessageBody = ({ messages }) => {
             ]}
           >
             <Image
-              source={{ uri: item.imageUrl }}
+              source={{ uri: item.imageUrl.url }}
               style={{ width: 200, height: 200, borderRadius: 7 }}
             />
             <Text

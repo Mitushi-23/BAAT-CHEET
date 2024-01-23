@@ -61,7 +61,7 @@ const Chat = ({ item }) => {
       }}
     >
       <Image
-        source={{ uri: item.image }}
+        source={{ uri: item.image.url }}
         style={{ width: 50, height: 50, borderRadius: 25, resizeMode: "cover" }}
       />
       <View style={{ flex: 1 }}>

@@ -18,7 +18,8 @@ const HomeScreen = () => {
       const response = await axiosUrl.get(
         `user/${userId}`
       );
-      setHeaderOptions(response.data.image);
+      console.log(response.data.image)
+      setHeaderOptions(response.data.image.url);
       setUserDetail(response.data);
     } catch (error) {
       console.log("error", error);

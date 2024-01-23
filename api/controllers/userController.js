@@ -4,7 +4,20 @@ const asyncHandler = require("express-async-handler");
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, password, image } = req.body;
-  const newUser = new User({ name, email, password, image: req.file.path });
+  let cloudinaryResult = null;
+
+  cloudinaryResult = await cloudinary.uploader.upload("image", {
+    folder: "message",
+  });
+  const newUser = new User({
+    name,
+    email,
+    password,
+    image: {
+      public_id: cloudinaryResult.public_id,
+      url: cloudinaryResult.secure_url,
+    },
+  });
   newUser
     .save()
     .then(() => {
