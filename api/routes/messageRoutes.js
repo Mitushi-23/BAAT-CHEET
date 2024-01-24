@@ -1,21 +1,25 @@
 const express = require("express");
-const { messages,fetchMessage } = require("../controllers/messageController");
+const { fetchMessage } = require("../controllers/messageController");
+const messageController = require("../controllers/messageController")
 const multer = require("multer");
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+
+
 const router = express.Router();
 
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, "files/images"); // Specify the desired destination folder
-//     },
-//     filename: function (req, file, cb) {
-//       // Generate a unique filename for the uploaded file
-//       const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-//       cb(null, uniqueSuffix + "-" + file.originalname);
-//     },
-//   });
-// const upload = multer({ storage: storage });
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: 'messages',
+      allowed_formats: ['jpg', 'jpeg', 'png'],
+    //   transformation: [{ width: 500, height: 500, crop: 'limit' }],
+    },
+  });
+  
+  const upload = multer({ storage });
 
-router.post("/messages",messages)
+router.post("/messages",upload.single('image'),messageController.messages)
 router.get("/messages/:senderId/:receiverId",fetchMessage)
 
 module.exports = router

@@ -19,7 +19,7 @@ const HomeScreen = () => {
         `user/${userId}`
       );
       console.log(response.data.image)
-      setHeaderOptions(response.data.image.url);
+      setHeaderOptions(response.data.image);
       setUserDetail(response.data);
     } catch (error) {
       console.log("error", error);

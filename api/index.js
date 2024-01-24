@@ -5,8 +5,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
 const app = express();
-const dotenv = require("dotenv")
-dotenv.config()
+const dotenv = require("dotenv");
+dotenv.config();
 const cors = require("cors");
 app.use(cors());
 const port = process.env.PORT;
@@ -28,12 +28,12 @@ mongoose
     console.log("Error ", err);
   });
 
-app.listen(port,()=>{
-    console.log("Server running on port",port);
-})
+app.listen(port, () => {
+  console.log("Server running on port", port);
+});
 
-const userRoutes = require("./routes/userRoutes")
-const messageRoutes = require("./routes/messageRoutes")
+const userRoutes = require("./routes/userRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 
 app.use("/api/user",userRoutes)
 app.use("/api/message",messageRoutes)

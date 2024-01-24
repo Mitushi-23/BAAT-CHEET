@@ -14,16 +14,17 @@ const messageSchema = new mongoose.Schema({
     enum: ["text", "image"],
   },
   message: String,
-  imageUrl: {
-    public_id:{
-      type: String,
+  // imageUrl: {
+  //   public_id:{
+  //     type: String,
      
-    },
-    url:{
-      type: String,
+  //   },
+  //   url:{
+  //     type: String,
       
-    }
-  },
+  //   }
+  // },
+  imageUrl:String,
   timeStamp: {
     type: Date,
     default: Date.now,

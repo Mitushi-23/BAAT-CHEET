@@ -57,19 +57,33 @@ const RegisterScreen = () => {
   const navigation = useNavigation();
 
   const handleRegister = () => {
-    const user = {
-      name: name,
-      email: email,
-      password: password,
-      image: image,
-    };
-    axiosUrl
-      .post("user/register", user)
+    // Create FormData object
+    const formData = new FormData();
 
+    // Append user data to FormData
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+
+    // Append image file to FormData if an image is selected
+    if (image) {
+      formData.append("image", {
+        uri: image,
+        type: "image/jpeg", // or 'image/png' depending on the image type
+        name: "profile.jpg", // name of the file
+      });
+    }
+
+    axiosUrl
+      .post("user/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         console.log(response);
         Alert.alert(
-          "Registration successfull",
+          "Registration successful",
           "You have been registered successfully"
         );
         setName("");

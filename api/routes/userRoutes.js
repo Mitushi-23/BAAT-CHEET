@@ -15,16 +15,19 @@ const {
 const { protect } = require("../middlewares/authModdleware");
 const multer = require("multer");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'files/profile'); // specify the folder where you want to save uploaded images
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname); // create unique filenames
-  },
-});
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
-const upload = multer({ storage: storage });
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: 'profile',
+      allowed_formats: ['jpg', 'jpeg', 'png'],
+    //   transformation: [{ width: 500, height: 500, crop: 'limit' }],
+    },
+  });
+  
+  const upload = multer({ storage });
 
 router.post("/register", upload.single('image'),register);
 router.post("/login", login);

@@ -9,7 +9,7 @@ export const RecepientProfile = ({ data, navigation }) => ({
         <Ionicons name="arrow-back" size={24} color="black" />
       </Pressable>
       <Image
-        source={{ uri: data.image.url }}
+        source={{ uri: data.image }}
         style={{ width: 30, height: 30, borderRadius: 15, resizeMode: "cover" }}
       />
       <Text style={{fontSize:15, fontWeight:'bold'}}>{data.name}</Text>

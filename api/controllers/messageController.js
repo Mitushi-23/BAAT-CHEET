@@ -6,16 +6,10 @@ const cloudinary = require("../utils/cloudinary");
 // endpoint to send message
 const messages = asyncHandler(async (req, res) => {
   try {
-    const { senderId, receiverId, messageType, messageText, imageUrl } =
+    const { senderId, receiverId, messageType, messageText } =
       req.body;
     console.log(req.body);
-    let cloudinaryResult = null;
-    if (messageType === "image" && imageUrl) {
-      cloudinaryResult = await cloudinary.uploader.upload(imageUrl, {
-        folder: "message",
-      });
-    }
-    console.log("cloudinaryResult", cloudinaryResult);
+    
     // Create a new message
     const newMessage = new Message({
       senderId,
@@ -23,12 +17,7 @@ const messages = asyncHandler(async (req, res) => {
       messageType,
       message: messageText,
       timeStamp: new Date(),
-      imageUrl: messageType==="image"? (cloudinaryResult
-        ? {
-            public_id: cloudinaryResult.public_id,
-            url: cloudinaryResult.secure_url,
-          }
-        : null):null,
+      imageUrl: messageType==="image"? req.file.path:null,
     });
     console.log(newMessage);
     // Save the new message to the database
@@ -51,7 +40,7 @@ const fetchMessage = asyncHandler(async (req, res) => {
         { senderId: receiverId, receiverId: senderId },
       ],
     }).populate("senderId", "_id name");
-
+    console.log(messages)
     res.json(messages);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });

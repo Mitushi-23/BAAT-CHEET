@@ -73,7 +73,7 @@ const handleFriendRequest = async (currentUserId, selectedUserId) => {
     >
       <View>
         <Image
-          source={{ uri: item.image.url }}
+          source={{ uri: item.image }}
           style={{
             width: 40,
             height: 40,

@@ -40,7 +40,7 @@ const ProfileScreen = () => {
       }}
     >
       <Image
-        source={{ uri: userDetail.image?.url }}
+        source={{ uri: userDetail.image }}
         style={{
           width: 200,
           height: 200,
