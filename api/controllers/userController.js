@@ -1,13 +1,14 @@
 const generateToken = require("../generateToken");
 const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
+const cloudinary = require("../utils/cloudinary");
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, password, image } = req.body;
   let cloudinaryResult = null;
 
-  cloudinaryResult = await cloudinary.uploader.upload("image", {
-    folder: "message",
+  cloudinaryResult = await cloudinary.uploader.upload(image, {
+    folder: "profile",
   });
   const newUser = new User({
     name,

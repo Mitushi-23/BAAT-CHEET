@@ -44,7 +44,7 @@ const FriendRequest = ({ item, friendRequest, setFriendRequest }) => {
       }}
     >
       <Image
-        source={{ uri: item.image }}
+        source={{ uri: item.image.url }}
         style={{ width: 50, height: 50, borderRadius: 25, resizeMode: "cover" }}
       />
       <Text style={{ fontSize: 15, flex: 1, marginLeft: 10 }}>

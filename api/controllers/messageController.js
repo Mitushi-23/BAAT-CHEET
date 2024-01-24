@@ -11,7 +11,7 @@ const messages = asyncHandler(async (req, res) => {
     console.log(req.body);
     let cloudinaryResult = null;
     if (messageType === "image" && imageUrl) {
-      cloudinaryResult = await cloudinary.uploader.upload("imageUrl", {
+      cloudinaryResult = await cloudinary.uploader.upload(imageUrl, {
         folder: "message",
       });
     }
