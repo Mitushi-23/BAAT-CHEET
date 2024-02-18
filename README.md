@@ -71,7 +71,7 @@ The app comes with a custom icon designed to enhance the overall user experience
 VARIABLE | Sample value
 ---- | ---
 JWT_KEY  | sample_key
-MONGO_URL  | mongodb://localhost/Shoppieshop
+MONGO_URL  | mongodb://localhost/BAATचीत
 PORT | 8080
 CLOUD_NAME | your_cloudinary_cloud_name
 API_KEY | your_cloudinary_api_key
