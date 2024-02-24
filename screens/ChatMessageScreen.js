@@ -11,6 +11,9 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import MessageBody from "../components/MessageBody";
 import axiosUrl from "../config";
+import io from 'socket.io-client';
+
+const socket = io('https://baat-cheet-nd2v.onrender.com/api/');
 
 const ChatMessageScreen = () => {
   const { userId } = useContext(UserType);
@@ -70,7 +73,8 @@ const ChatMessageScreen = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [messages]);
+
 
   useEffect(() => {
     if (recepientData) {

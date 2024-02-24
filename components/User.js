@@ -12,11 +12,11 @@ const User = ({ item }) => {
 
   useEffect(() => {
     fetchSentFriendRequests();
-  }, []);
+  }, [sentFriendRequests]);
 
   useEffect(() => {
     fetchFriends();
-  }, []);
+  }, [friends]);
 
   const fetchSentFriendRequests = async () => {
     try {
