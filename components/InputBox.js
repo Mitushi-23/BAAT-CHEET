@@ -9,7 +9,7 @@ import axios from "axios";
 import axiosUrl from "../config";
 import io from 'socket.io-client';
 
-const socket = io('http://192.168.132.101:8000/api/');
+const socket = io('https://baat-cheet-nd2v.onrender.com/api/');
 
 const InputBox = ({ fetchMessages }) => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
