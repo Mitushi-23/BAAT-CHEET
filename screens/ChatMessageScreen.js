@@ -61,6 +61,15 @@ const ChatMessageScreen = () => {
   useEffect(() => {
     recepientDetail();
     fetchMessages();
+    socket.on('message', (data) => {
+      console.log('Received message:', data);
+      // Handle received message
+      setMessages((prevMessages) => [...prevMessages, data]);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {

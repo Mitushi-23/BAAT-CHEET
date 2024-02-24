@@ -17,6 +17,7 @@ const InputBox = ({ fetchMessages }) => {
   const { userId, setUserId } = useContext(UserType);
 
   const [selectedImage, setSelectedImage] = useState("");
+  const [receivedMessage, setReceivedMessage] = useState("");
   const route = useRoute();
   const { recepientId } = route.params;
 
@@ -94,6 +95,7 @@ const InputBox = ({ fetchMessages }) => {
     socket.on('message', (data) => {
       console.log('Received message:', data);
       // Handle received message
+      setReceivedMessage(data);
     });
 
     return () => {
