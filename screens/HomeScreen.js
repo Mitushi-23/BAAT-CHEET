@@ -18,7 +18,6 @@ const HomeScreen = () => {
       const response = await axiosUrl.get(
         `user/${userId}`
       );
-      console.log(response.data.image)
       setHeaderOptions(response.data.image);
       setUserDetail(response.data);
     } catch (error) {
@@ -47,7 +46,7 @@ const HomeScreen = () => {
   useEffect(() => {
     fetchUser();
     fetchUserDetail();
-  }, []);
+  }, [userId, userDetail]);
 
   const handleProfile = () => {
     navigation.navigate("Profile");
@@ -95,6 +94,7 @@ const HomeScreen = () => {
   return (
     <View>
       <View style={{ margin: 10 }}>
+
         {users.map((item, index) => (
           <User key={index} item={item} />
         ))}

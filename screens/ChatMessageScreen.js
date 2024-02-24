@@ -3,7 +3,7 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import InputBox from "../components/InputBox";
 import { UserType } from "../userContext";
 import { RecepientProfile } from "../components/MessageHeader";
@@ -19,6 +19,22 @@ const ChatMessageScreen = () => {
   const [messages, setMessages] = useState(null);
   const route = useRoute();
   const { recepientId } = route.params;
+
+  const scrollViewRef = useRef(null);
+
+  useEffect(() => {
+    scrollToBottom()
+  },[]);
+
+  const scrollToBottom = () => {
+      if(scrollViewRef.current){
+          scrollViewRef.current.scrollToEnd({animated:false})
+      }
+  }
+
+  const handleContentSizeChange = () => {
+      scrollToBottom();
+  }
 
   const recepientDetail = async () => {
     try {
@@ -57,7 +73,7 @@ const ChatMessageScreen = () => {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
-      <ScrollView>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={{flexGrow:1}} onContentSizeChange={handleContentSizeChange}>
         <MessageBody messages={messages} />
       </ScrollView>
       <InputBox fetchMessages={fetchMessages} />
