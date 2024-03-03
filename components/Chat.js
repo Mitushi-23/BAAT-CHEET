@@ -43,6 +43,31 @@ const Chat = ({ item }) => {
     return new Date(time).toLocaleString("en-US", options);
   };
 
+  const formatDate = (time) => {
+    const messageDate = new Date(time);
+    const currentDate = new Date();
+
+    if (
+      messageDate.getDate() === currentDate.getDate() &&
+      messageDate.getMonth() === currentDate.getMonth() &&
+      messageDate.getFullYear() === currentDate.getFullYear()
+    ) {
+      return formatTime(time);
+    } else {
+      currentDate.setDate(currentDate.getDate() - 1);
+      if (
+        messageDate.getDate() === currentDate.getDate() &&
+        messageDate.getMonth() === currentDate.getMonth() &&
+        messageDate.getFullYear() === currentDate.getFullYear()
+      ) {
+        return "Yesterday";
+      } else {
+        const dayOption = { day: "numeric", month: "numeric", year: "2-digit" };
+        return new Date(time).toLocaleString("en-US", dayOption);
+      }
+    }
+  };
+
   return (
     <Pressable
       onPress={() =>
@@ -89,7 +114,7 @@ const Chat = ({ item }) => {
       </View>
       <View>
         <Text style={{ color: "#585858", fontWeight: 400 }}>
-          {lastMsg ? formatTime(lastMsg.timeStamp) : ""}
+          {lastMsg ? formatDate(lastMsg.timeStamp) : ""}
         </Text>
       </View>
     </Pressable>
