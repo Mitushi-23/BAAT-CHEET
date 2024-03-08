@@ -9,11 +9,13 @@ BAATचीत is a cross-platform chat application built using React Native for 
 ## Tech Stack
 - **Frontend:**
   - React Native
+  - Socket.IO client
 
 - **Backend:**
   - Node.js
   - Express.js
   - MongoDB
+  - Socket.IO
 
 - **Authentication:**
   - Jwt authentication
@@ -30,6 +32,7 @@ BAATचीत is a cross-platform chat application built using React Native for 
 - **Chat Page:**
   - Displays list of all friends with the last message.
   - Enables users to chat with friends via text, emojis, and images.
+  - Implements Socket.IO for seamless real-time messaging, eliminating the need for constant page refreshing.
 
 - **Request Received Page:**
   - Displays friend requests received by the user.
